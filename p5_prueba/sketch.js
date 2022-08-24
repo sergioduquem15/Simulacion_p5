@@ -1,17 +1,17 @@
-//var temperatura = 0.5;
-tamanio = 10;
-WIDTH = tamanio * 100;
-HEIGHT = tamanio * 100;
 
 let temperatura; 
-let valTemp = 100;
+let valTemp = 100; 
+x=40;
+y=40;
+tamanio = 10;
+WIDTH = tamanio*100+100;
+HEIGHT = tamanio*100+100;
 
 
 // ---------------------------------------------
 // --------- SET UP - INICIALIZACIÓN ------------
 // ---------------------------------------------
 function setup() {
-
   frameRate(1);
   createCanvas(WIDTH, HEIGHT);
 
@@ -27,21 +27,31 @@ function setup() {
 }
 
 
+
+function cmass(n) {
+  var pos = [];
+  for(var i=0;i<n;i++){
+    pos[i] = (i*100)+100;
+  }
+  return pos;
+}
+
+
 // ------------------------------------
 // --------- LOOP DIBUJAR ------------
 // ------------------------------------
 function draw() {
-	background(220);
-  
-  valTemp = temperatura.value(); 
 
-  // Evolución de Estados
+	background(220);  
+	
+	// Evolución de Estados
+	valTemp = temperatura.value(); 
 	primerEstado.evolucionar(valTemp);
-  primerEstado.dibujar();
-  fill(0);
-  text("Temperatura: "+nfc(valTemp), 150, 35);
-
-  //console.log(primerEstado.matixEstadoInicial)
+	textSize(32);
+  	primerEstado.dibujar()
+	fill(0);
+	text("Temp: "+nfc(valTemp), 10,60);
+	
 
   }
 
@@ -84,8 +94,7 @@ class estadoInicial {
 	
 }
 
-
-// ----------------------------------
+  // ----------------------------------
 // --------- MONTE CARLO ------------
 // ----------------------------------
 function MonteCarlo(conf, beta){
@@ -100,7 +109,7 @@ function MonteCarlo(conf, beta){
 		var b = Math.floor(Math.random() * (L));
   
 		var sigma = conf[a][b];
-      
+
 		var config1 = conf[mod((a+1), L) ][b];
 		var config2 = conf[a][mod((a+1), L)];
 		var config3 = conf[mod((a-1), L)][b];
@@ -141,32 +150,15 @@ function mod(n, m) {
   }
 
 
+
 function dot(x,y,status){
   if(status === true) { 
-    fill(255,200,100);
-    // angle = 0;
+    fill(255,255,255);
    }
   else {
-    fill(0,255,255);
-    // angle = 180;
+    fill(255,200,100);
    }
-  // angleMode(DEGREES);
-  // var angle;
   
-  square(x,y,100);
-
-  //rotate(0)
-  // beginShape();
-  // vertex(x,y-20);
-  // vertex(x+10,y-20);
-  // vertex(x+10,y-30);
-  // vertex(x+30,y-15);
-  // vertex(x+10,y);
-  // vertex(x+10,y-10);
-  // vertex(x,y-10);
-  // vertex(x,y-20);
-  // endShape();
- 
-
+  square(x,y,90);
 }
  
