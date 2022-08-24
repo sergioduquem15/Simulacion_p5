@@ -66,7 +66,7 @@ function MagnDipole(x,y,length){
   this.x = x;
   this.y = y;
   this.length = length;
-  angle = atan2(mouseY-y,mouseX-x);
+  //angle = atan2(mouseY-y,mouseX-x);
 
   angleMode(DEGREES);  
 
@@ -76,7 +76,7 @@ function MagnDipole(x,y,length){
     rotate(angle);
 
     beginShape();
-    vertex(0,-this.length);
+    vertex(0, -this.length);
     vertex(5*this.length,-this.length);
     vertex(5*this.length,-3*this.length);
     vertex(9*this.length,0);
