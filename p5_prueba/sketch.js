@@ -1,18 +1,19 @@
 
 let temperatura; 
 let valTemp = 100; 
-x=40;
-y=40;
-tamanio = 10;
-WIDTH = tamanio*100+100;
-HEIGHT = tamanio*100+100;
+tamanio = 20; // numero de paticulas
+
+dimensiones = 50;
+WIDTH = tamanio * dimensiones + 100;
+HEIGHT = tamanio * dimensiones + 100;
+
 
 
 // ---------------------------------------------
 // --------- SET UP - INICIALIZACIÓN ------------
 // ---------------------------------------------
 function setup() {
-  frameRate(1);
+  frameRate(2);
   createCanvas(WIDTH, HEIGHT);
 
   temperatura = createSlider(0, 100,valTemp, 0.1); 
@@ -26,15 +27,6 @@ function setup() {
   
 }
 
-
-
-function cmass(n) {
-  var pos = [];
-  for(var i=0;i<n;i++){
-    pos[i] = (i*100)+100;
-  }
-  return pos;
-}
 
 
 // ------------------------------------
@@ -53,7 +45,7 @@ function draw() {
 	text("Temp: "+nfc(valTemp), 10,60);
 	
 
-  }
+}
 
 // ------------------------------------
 // --------- ESTADO INICIAL ------------
@@ -94,7 +86,7 @@ class estadoInicial {
 	
 }
 
-  // ----------------------------------
+// ----------------------------------
 // --------- MONTE CARLO ------------
 // ----------------------------------
 function MonteCarlo(conf, beta){
@@ -118,18 +110,18 @@ function MonteCarlo(conf, beta){
   
 		var del_E = 2 * sigma * neighbors;
   
-		if(del_E < 0) { 
+		if(del_E < 0) {
 		  sigma *= -1;
 		} else if(Math.random() < Math.exp(-1 * del_E * beta)) {
 		  sigma *= -1;
 		}
-  
+		
 		newConfig[a][b] = sigma;
 	  }
 	}
   
 	return newConfig;
-  }
+}
   
 
 
@@ -137,7 +129,7 @@ function MonteCarlo(conf, beta){
 function cmass(n) {
   var pos = [];
   for(var i=0;i<n;i++){
-    pos[i] = (i*100);
+    pos[i] = (i*dimensiones)+100;
   }
   return pos;
 }
@@ -159,6 +151,6 @@ function dot(x,y,status){
     fill(255,200,100);
    }
   
-  square(x,y,90);
+  square(x,y,dimensiones*0.8);
 }
  
