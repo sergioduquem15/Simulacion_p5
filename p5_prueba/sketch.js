@@ -1,10 +1,16 @@
-
 let temperatura; 
+let avmagn;
+let magn;
 let valTemp = 100; 
-tamanio = 20; // numero de paticulas
+let magtx;
+let apagar;
+let encender;
+let plot;
+let x = 0;
+tamanio = 10; // numero de paticulas
 
 dimensiones = 50;
-WIDTH = tamanio * dimensiones + 100;
+WIDTH = tamanio * dimensiones + 600;
 HEIGHT = tamanio * dimensiones + 100;
 
 
@@ -15,13 +21,29 @@ HEIGHT = tamanio * dimensiones + 100;
 function setup() {
   frameRate(2);
   createCanvas(WIDTH, HEIGHT);
-
-  temperatura = createSlider(0, 100,valTemp, 0.1); 
-  temperatura.position(10,10); 
-  temperatura.style('width', '20%');
+  
+  
+  
+  //temperatura = createSlider(0, 7,valTemp, 0.1); 
+  //temperatura.position(10,10); 
+  //temperatura.style('width', '20%');
 
   primerEstado = new estadoInicial(tamanio);
   primerEstado.dibujar();
+  
+  plot = new GPlot(this, 550, 0,500,500);
+  plot.setTitleText("Promedio de la magnetizacion vs temperatura");
+  plot.getXAxis().setAxisLabelText("Temperatura [K]");
+  plot.getYAxis().setAxisLabelText("Magnetizacion promedio [A/m]");
+
+  plot.getYAxis().setNTicks(2);
+  plot.setXLim(0, 20);
+  plot.setYLim(0, 2.0);
+  plot.setGridLineWidth(2);
+  plot.setGridLineColor(210);
+
+  plot.setLineColor(120);
+  plot.setLineWidth(1);
 
   console.log("Estado inicial", primerEstado.matixEstadoInicial);
   
@@ -32,20 +54,49 @@ function setup() {
 // ------------------------------------
 // --------- LOOP DIBUJAR ------------
 // ------------------------------------
+
 function draw() {
 
 	background(220);  
 	
 	// Evolución de Estados
-	valTemp = temperatura.value(); 
-	primerEstado.evolucionar(valTemp);
-	textSize(32);
+	//valTemp = temperatura.value(); 
+	primerEstado.evolucionar(x);
+    avmagn = primerEstado.update();
+    magtx = primerEstado.magtext();
+    console.log(magtx);
+	textSize(20);
   	primerEstado.dibujar()
 	fill(0);
-	text("Temp: "+nfc(valTemp), 10,60);
-	
+	//text("Temperatura: "+nfc(valTemp), 220,30);
+    text("Temperatura: "+nfc(x,2), 600,520);
+    text("Magnetizacion: "+nfc(magtx), 600,550);
 
+  plot.addPoint(x,avmagn);
+  plot.beginDraw();
+
+  
+  plot.drawBox();
+  plot.drawXAxis();
+  plot.drawYAxis();
+  plot.drawTitle();
+  plot.drawGridLines(GPlot.BOTH);
+  plot.drawLines();
+  plot.drawPoints();
+
+  plot.endDraw();
+  x = x+0.1;
+  
+  encender = createButton("Continuar");
+  encender.position(850,520);
+  encender.mousePressed(loop);
+  
+  apagar = createButton("Pausar");
+  apagar.position(950,520);
+  apagar.mousePressed(noLoop);
+  
 }
+
 
 // ------------------------------------
 // --------- ESTADO INICIAL ------------
@@ -68,6 +119,33 @@ class estadoInicial {
   evolucionar =  function(T){
 		this.matixEstadoInicial =  MonteCarlo(this.matixEstadoInicial, 1/T);
 	  } 
+
+    update = function(){
+		this.magnetization = 0;
+        this.magabs = 0
+      
+        this.averageMagnetization = 0;
+      
+		for(var i = 0; i < tamanio; i++){
+			for(var j = 0; j < tamanio; j++){
+				this.magnetization += this.matixEstadoInicial[i][j];
+			}
+		}
+      this.magtxt = this.magnetization
+      if(this.magnetization < 0) {this.magabs += this.magnetization*(-1)}
+      else {this.magabs += this.magnetization}
+        
+        this.averageMagnetization += this.magabs/(tamanio*tamanio);
+        
+        
+        return this.averageMagnetization
+    }
+
+    magtext = function(){
+      this.magtxt = 0
+      this.magtxt +=this.magnetization;
+      return this.magtxt;
+    }
 	
 	dibujar = function(){
 		var arr = [];
@@ -129,7 +207,7 @@ function MonteCarlo(conf, beta){
 function cmass(n) {
   var pos = [];
   for(var i=0;i<n;i++){
-    pos[i] = (i*dimensiones)+100;
+    pos[i] = (i*dimensiones+80);
   }
   return pos;
 }
@@ -151,6 +229,5 @@ function dot(x,y,status){
     fill(255,200,100);
    }
   
-  square(x,y,dimensiones*0.8);
+  ellipse(x,y,dimensiones*0.8);
 }
- 
