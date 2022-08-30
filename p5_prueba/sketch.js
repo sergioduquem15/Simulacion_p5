@@ -6,7 +6,7 @@ let magtx;
 let apagar;
 let encender;
 let plot;
-let x = 0;
+let x = 0.1;
 tamanio = 10; // numero de paticulas
 
 dimensiones = 50;
@@ -19,7 +19,7 @@ HEIGHT = tamanio * dimensiones + 100;
 // --------- SET UP - INICIALIZACIÓN ------------
 // ---------------------------------------------
 function setup() {
-  frameRate(2);
+  frameRate(3); 
   createCanvas(WIDTH, HEIGHT);
   
   
@@ -31,7 +31,7 @@ function setup() {
   primerEstado = new estadoInicial(tamanio);
   primerEstado.dibujar();
   
-  plot = new GPlot(this, 550, 0,500,500);
+  plot = new GPlot(this, 570, 0,500,500);
   plot.setTitleText("Promedio de la magnetizacion vs temperatura");
   plot.getXAxis().setAxisLabelText("Temperatura [K]");
   plot.getYAxis().setAxisLabelText("Magnetizacion promedio [A/m]");
@@ -54,7 +54,6 @@ function setup() {
 // ------------------------------------
 // --------- LOOP DIBUJAR ------------
 // ------------------------------------
-
 function draw() {
 
 	background(220);  
@@ -63,15 +62,16 @@ function draw() {
 	//valTemp = temperatura.value(); 
 	primerEstado.evolucionar(x);
     avmagn = primerEstado.update();
-    magtx = primerEstado.magtext();
-    console.log(magtx);
+    //magtx = primerEstado.magtext()
+  	magtx = primerEstado.magtext()
 	textSize(20);
   	primerEstado.dibujar()
 	fill(0);
 	//text("Temperatura: "+nfc(valTemp), 220,30);
     text("Temperatura: "+nfc(x,2), 600,520);
     text("Magnetizacion: "+nfc(magtx), 600,550);
-
+	
+  
   plot.addPoint(x,avmagn);
   plot.beginDraw();
 
@@ -229,5 +229,5 @@ function dot(x,y,status){
     fill(255,200,100);
    }
   
-  ellipse(x,y,dimensiones*0.8);
+  square(x,y,dimensiones*0.8);
 }
