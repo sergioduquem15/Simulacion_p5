@@ -31,6 +31,7 @@ function setup() {
   primerEstado = new estadoInicial(tamanio);
   primerEstado.dibujar();
   
+  /*
   plot = new GPlot(this, 570, 0,500,500);
   plot.setTitleText("Promedio de la magnetizacion vs temperatura");
   plot.getXAxis().setAxisLabelText("Temperatura [K]");
@@ -44,7 +45,7 @@ function setup() {
 
   plot.setLineColor(120);
   plot.setLineWidth(1);
-
+  */
   console.log("Estado inicial", primerEstado.matixEstadoInicial);
   
 }
@@ -71,7 +72,7 @@ function draw() {
     text("Temperatura: "+nfc(x,2), 600,520);
     text("Magnetizacion: "+nfc(magtx), 600,550);
 	
-  
+  /*
   plot.addPoint(x,avmagn);
   plot.beginDraw();
 
@@ -85,6 +86,8 @@ function draw() {
   plot.drawPoints();
 
   plot.endDraw();
+
+  */
   x = x+0.1;
   
   encender = createButton("Continuar");
