@@ -1,23 +1,27 @@
 
 let temperatura; 
 let valTemp = 100; 
-tamanio = 20; // numero de paticulas
+//var tamanio = 20; // numero de paticulas
 
 dimensiones = 50;
-WIDTH = tamanio * dimensiones + 100;
-HEIGHT = tamanio * dimensiones + 100;
+WIDTH = 50 * dimensiones + 100;
+HEIGHT = 50 * dimensiones + 100;
 
 
 
 // ---------------------------------------------
-// --------- SET UP - INICIALIZACIÓN ------------
+// --------- SET UP - INICIALIZACIÓN -----------
 // ---------------------------------------------
 function setup() {
   frameRate(2);
   createCanvas(WIDTH, HEIGHT);
 
-  temperatura = createSlider(0, 100,valTemp, 0.1); 
+  temperatura = createSlider(0, 100, valTemp, 0.1); 
+
   temperatura.position(10,10); 
+
+  listaParticulas();
+  tamanio = mySelectEvent();
   temperatura.style('width', '20%');
 
   primerEstado = new estadoInicial(tamanio);
@@ -35,15 +39,15 @@ function setup() {
 function draw() {
 
 	background(220);  
+	tamanio = mySelectEvent();
 	
 	// Evolución de Estados
 	valTemp = temperatura.value(); 
 	primerEstado.evolucionar(valTemp);
 	textSize(32);
-  	primerEstado.dibujar()
+  	primerEstado.dibujar();
 	fill(0);
 	text("Temp: "+nfc(valTemp), 10,60);
-	
 
 }
 
@@ -152,5 +156,26 @@ function dot(x,y,status){
    }
   
   square(x,y,dimensiones*0.8);
+}
+
+
+// ----------------------------
+
+let sel;
+
+function listaParticulas() {
+
+  background(200);
+  sel = createSelect();
+  sel.position(WIDTH-100, 20);
+  sel.option(10);
+  sel.option(20);
+  sel.option(30);
+  sel.selected(40);
+  sel.changed(mySelectEvent);
+}
+
+function mySelectEvent() {
+	return sel.value();
 }
  
