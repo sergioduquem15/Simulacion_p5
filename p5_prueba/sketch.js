@@ -23,7 +23,8 @@ let tabla;
 let añadir;
 
 var numParticulas = 30;
-var magCampo = 50;  
+var magCampo = 50;
+var J = 1;
 
 
 
@@ -68,7 +69,7 @@ function setup() {
   plot.setLineWidth(1);
   
   // Ingresar la cantidad de partículas
-  input = createInput('30');
+  input = createInput(nfc(numParticulas));
   input.size(50);
   input.position(HEIGHT+70, 483);
   button = createButton("Enviar");
@@ -77,14 +78,30 @@ function setup() {
   input2 = createInput(nfc(magCampo));
   input2.size(50);
   input2.position(HEIGHT+70, 520);
-  button = createButton("Enviar");
-  button.position(HEIGHT+127, 520);
+  button2 = createButton("Enviar");
+  button2.position(HEIGHT+127, 520);
+  
+  input3 = createInput(nfc(J));
+  input3.size(50);
+  input3.position(HEIGHT+70, 560);
+  button3 = createButton("Enviar");
+  button3.position(HEIGHT+127, 560);
+
 
   // Si se presiona se establece el numero de 
   // partículas ingresadas en el input y refresca
   button.mousePressed(() => {
     numParticulas = input.value();
+    setup();
+  });
+  
+  button2.mousePressed(() => {
     magCampo = input2.value();
+    setup();
+  });
+  
+  button3.mousePressed(() => {
+    J = input3.value();
     setup();
   });
   
@@ -112,7 +129,7 @@ function draw() {
    * y cada que entra al loop, el
    * estado evoluciona 
    */
-  estado.evolucionar(temperatura,magCampo);
+  estado.evolucionar(J,temperatura,magCampo);
   avmagn = estado.actualizar();
   magtx = estado.magtext()
   estado.dibujar();
@@ -136,6 +153,7 @@ function draw() {
   
   text("L = ", HEIGHT + 30, 500);
   text("H = ", HEIGHT + 27, 537);
+  text("J = ", HEIGHT + 27, 577);
   
   if (temperatura > 20){ noLoop()};
   
@@ -181,10 +199,10 @@ class estadoDelSistema {
   // ---- Funciones de la clase ----
   // -------------------------------
 
-  evolucionar = function (T,B) {
+  evolucionar = function (J,T,B) {
 
     // Guarda el resultado de la función Montecarlo
-    this.matrizDeEstado = MonteCarlo(this.matrizDeEstado,1/T,B);
+    this.matrizDeEstado = MonteCarlo(this.matrizDeEstado,J,1/T,B);
   }
 
 
@@ -251,7 +269,7 @@ class estadoDelSistema {
 // ----------------------------------
 // --------- MONTE CARLO ------------
 // ----------------------------------
-function MonteCarlo(configuracion, beta, campo) {
+function MonteCarlo(configuracion,J, beta, campo) {
 
   var L = configuracion.length;
   nuevaConfig = [...configuracion]; // Copia de la configuracion
@@ -267,9 +285,9 @@ function MonteCarlo(configuracion, beta, campo) {
       var config4 = configuracion[i][mod((j - 1), L)];
       var conf_j = config1 + config2 + config3 + config4;
 
-      var E_i = -conf_i*conf_j - conf_i*campo; /// campo
+      var E_i = -J*conf_i*conf_j - conf_i*campo; /// campo
       var conf_ip = -1*conf_i;
-      var E_f = -conf_ip*conf_j - conf_i*campo; /// campo
+      var E_f = -J*conf_ip*conf_j - conf_ip*campo; /// campo
 
       var del_E = E_f - E_i;
 
